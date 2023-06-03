@@ -1,4 +1,6 @@
-package highway;
+package highway.vehicle;
+
+import highway.Account;
 
 public class HybridCar extends Car{
 
