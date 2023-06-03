@@ -2,7 +2,7 @@ package highway;
 
 
 
-public abstract class  Vehicle implements Comparable<Vehicle> {
+public abstract class  Vehicle {
 	private String type;
 	private int number;
 	private Account account;
