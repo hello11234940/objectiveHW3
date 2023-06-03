@@ -1,4 +1,4 @@
-package highway;
+package main;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,11 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import highway.DateTime;
+import highway.VehiclesSystem;
+import highway.vehicle.Bus;
+import highway.vehicle.Car;
+import highway.vehicle.HybridCar;
+import highway.vehicle.Truck;
+import highway.vehicle.Vehicle;
+
 
 
 
 
 public class Main {
+	
+	public String getVehicleType(Vehicle v) {
+		if(v instanceof Car) {
+			return "car";
+		}
+		
+		
+		return "";
+	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner sc = new Scanner(new InputStreamReader(new FileInputStream("vehicles.txt")));
@@ -19,10 +36,18 @@ public class Main {
 		int carCnt = Integer.parseInt(sc.nextLine());
 		
 		List<Vehicle> vehiclesList = new ArrayList<>();
-		List<Car> carList = new ArrayList<>();
-		List<HybridCar> hybirdList = new ArrayList<>();
-		List<Truck> truckList = new ArrayList<>();
-		List<Bus> busList = new ArrayList<>();
+		
+		Car c;
+		
+		vehiclesList.add(c);
+		
+		if(c instanceof Car) {
+			
+		}
+		
+		
+		
+		
 		
 		
 		for(int i = 0; i<carCnt;i++) {
@@ -34,25 +59,25 @@ public class Main {
 			if(type.equals("c")) {
 				int volume = Integer.parseInt(word[2]);
 				vehiclesList.add(new Car(type,number,volume));
-				carList.add(new Car(type,number,volume));
+				
 			}
 			
 			else if(type.equals("h")) {
 				int volume = Integer.parseInt(word[2]);
 				vehiclesList.add(new HybridCar(type,number,volume));
-				hybirdList.add(new HybridCar(type,number,volume));
+				
 			}
 			
 			else if(type.equals("b")) {
 				int people = Integer.parseInt(word[2]);
 				vehiclesList.add(new Bus(type,number,people));
-				busList.add(new Bus(type,number,people));
+				
 			}
 			
 			else if(type.equals("t")) {
 				int weight = Integer.parseInt(word[2]);
 				vehiclesList.add(new Truck(type,number,weight));
-				truckList.add(new Truck(type,number,weight));
+				
 			}
 			
 		}
