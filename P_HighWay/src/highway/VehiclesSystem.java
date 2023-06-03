@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import highway.vehicle.Bus;
+import highway.vehicle.Car;
+import highway.vehicle.HybridCar;
+import highway.vehicle.Truck;
+import highway.vehicle.Vehicle;
+
 public class VehiclesSystem {
 	private List<Vehicle> vehicleList;
 	private List<Car> carList;
