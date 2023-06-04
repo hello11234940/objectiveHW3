@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import highway.DateTime;
+import highway.Place;
 import highway.VehiclesSystem;
 import highway.vehicle.Bus;
 import highway.vehicle.Car;
@@ -18,7 +19,7 @@ import highway.vehicle.Vehicle;
 public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
-
+		DateTime currentTime = null;
 		Scanner sc = new Scanner(new InputStreamReader(new FileInputStream("vehicles.txt")));
 
 		int carCnt = Integer.parseInt(sc.nextLine());
@@ -28,7 +29,7 @@ public class Main {
 		String[] a = r.nextLine().split(" ");
 		int carFee = Integer.parseInt(a[0]);
 		int carRate = Integer.parseInt(a[1]);
-	
+
 		a = r.nextLine().split(" ");
 		int busFee = Integer.parseInt(a[0]);
 		int busRate = Integer.parseInt(a[1]);
@@ -36,7 +37,6 @@ public class Main {
 		a = r.nextLine().split(" ");
 		int truckFee = Integer.parseInt(a[0]);
 		int truckRate = Integer.parseInt(a[1]);
-		
 
 		for (int i = 0; i < carCnt; i++) {
 			String[] word = sc.nextLine().split(" ");
@@ -45,22 +45,22 @@ public class Main {
 
 			if (carType.equals("c")) {
 				int volume = Integer.parseInt(word[2]);
-				vehiclesList.add(new Car(carType, number, carFee,carRate,volume));
+				vehiclesList.add(new Car(carType, number, carFee, carRate, volume));
 			}
 
 			if (carType.equals("h")) {
 				int volume = Integer.parseInt(word[2]);
-				vehiclesList.add(new HybridCar(carType, number, carFee/2,carRate,volume));
+				vehiclesList.add(new HybridCar(carType, number, carFee / 2, carRate, volume));
 			}
 
 			if (carType.equals("b")) {
 				int passengerNum = Integer.parseInt(word[2]);
-				vehiclesList.add(new Bus(carType, number, busFee,busRate,passengerNum));
+				vehiclesList.add(new Bus(carType, number, busFee, busRate, passengerNum));
 			}
 
 			if (carType.equals("t")) {
 				int weight = Integer.parseInt(word[2]);
-				vehiclesList.add(new Truck(carType, number, truckFee,truckRate,weight));
+				vehiclesList.add(new Truck(carType, number, truckFee, truckRate, weight));
 			}
 
 		}
@@ -74,7 +74,7 @@ public class Main {
 			switch (cmds[0]) {
 			// t 2023 6 2 12 00
 			case "t":
-				DateTime currentTime = new DateTime(Integer.parseInt(cmds[1]), Integer.parseInt(cmds[2]),
+				currentTime = new DateTime(Integer.parseInt(cmds[1]), Integer.parseInt(cmds[2]),
 						Integer.parseInt(cmds[3]), Integer.parseInt(cmds[4]), Integer.parseInt(cmds[5]));
 				if (!DateTime.isValid(currentTime)) {
 					System.out.println("현재시간 :");
@@ -86,17 +86,28 @@ public class Main {
 				break;
 			// n 1234 서울 대전 100
 			case "n":
-
-				break;
-			case "o":
-
-				break;
-			case "x":
-
-				break;
-			case "c":
-
-				break;
+				   if (currentTime != null) {
+		                int carNumber = Integer.parseInt(cmds[1]);
+		                Place startPoint = Place.getByName(cmds[2]);
+		                Place endPoint = Place.getByName(cmds[3]);
+		                int speed = Integer.parseInt(cmds[4]);
+		                vs.enterHighway(currentTime, carNumber, startPoint, endPoint, speed);
+		                
+		            } else {
+		                System.out.println("현재시간이 설정되지 않았습니다.");
+		            }
+		            break;
+			    
+				
+//			case "o":
+//				
+//				break;
+//			case "x":
+//
+//				break;
+//			case "c":
+//
+//				break;
 			}
 
 		}
