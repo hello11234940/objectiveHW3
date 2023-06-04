@@ -1,6 +1,10 @@
 package highway;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,10 +16,10 @@ import highway.vehicle.Vehicle;
 
 public class VehiclesSystem {
 	private List<Vehicle> vehicleList;
-	private List<Car> carList;
-	private List<HybridCar> hybridList;
-	private List<Bus> busList;
-	private List<Truck> truckList;
+	
+	private DateTime dt;
+	private int carFee;
+	
 	private Scanner sc;
 	
 	public VehiclesSystem(Scanner sc,List<Vehicle> vehicleList)
@@ -23,35 +27,65 @@ public class VehiclesSystem {
 		this.sc = sc;
 		this.vehicleList = vehicleList;
 	}
-	public VehiclesSystem(Scanner sc, List<Car> carList, List<HybridCar> hybridList, List<Bus> busList, List<Truck> truckList) {
-	    this.sc = sc;
-	    this.carList = carList;
-	    this.hybridList = hybridList;
-	    this.busList = busList;
-	    this.truckList = truckList;
-
-	    this.vehicleList = new ArrayList<>();
-	    vehicleList.addAll(carList);
-	    vehicleList.addAll(hybridList);
-	    vehicleList.addAll(busList);
-	    vehicleList.addAll(truckList);
+	
+	public String getVehicleType(Vehicle v) {
+		if(v instanceof Car) {
+			
+			return "승용차";
+		}
+		
+		else if(v instanceof HybridCar) {
+			return "하이브리드차";
+		}
+		
+		else if(v instanceof Bus) {
+			return "버스";
+		}
+		
+		else if(v instanceof Truck) {
+			return "트럭";
+		}
+		
+		return "";
 	}
 	
-	public List<Vehicle> enterHighway(int number, String startPlace, String endPlace, int speed) {
-	    List<Vehicle> enteredVehicles = new ArrayList<>();
-	    
-	    // 차량 리스트에서 번호에 해당하는 차량을 찾아 진입 처리
+	
+
+	public void enterHighway(DateTime dt, int carNumber, Place startPoint, Place endPoint, int speed) {
 	    for (Vehicle vehicle : vehicleList) {
-	        if (vehicle.getNumber() == number) {
-	        	
-	            vehicle.enterHighway(startPlace, endPlace, speed);
-	            enteredVehicles.add(vehicle);
+	        if (vehicle.getcarNumber() == carNumber) {
+	        	vehicle.setCurrentTime(dt);
+	            vehicle.setStartPoint(startPoint);
+	            vehicle.setEndPoint(endPoint);
+	            vehicle.setSpeed(speed);
+	            System.out.println(vehicle.getCarType() + " " + carNumber + " 진입");
+	            System.out.println(vehicle.enterHighwayInfo());
 	            break;
 	        }
 	    }
-
-	    return enteredVehicles;
 	}
+	public void showByEndTime(DateTime et) {
+		for (Vehicle vehicel : vehicleList) {
+			if()
+		}
+	}
+	
+	public List<Vehicle> showByTime()
+	{
+		return null;
+	}
+	
+	
+	public static boolean isVaildEnterHighwayBySpeed(int speed) {
+		if(speed>120 && speed<50) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	
 	
 	
 }
