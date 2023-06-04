@@ -20,6 +20,7 @@ public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		DateTime currentTime = null;
+		DateTime previousTime = null;
 		Scanner sc = new Scanner(new InputStreamReader(new FileInputStream("vehicles.txt")));
 
 		int carCnt = Integer.parseInt(sc.nextLine());
@@ -69,7 +70,7 @@ public class Main {
 		VehiclesSystem vs = new VehiclesSystem(sc, vehiclesList);
 
 		while (true) {
-			String[] cmds = sc.nextLine().split(" ");
+ 			String[] cmds = sc.nextLine().split(" ");
 
 			switch (cmds[0]) {
 			// t 2023 6 2 12 00
@@ -83,6 +84,16 @@ public class Main {
 				else {
 					System.out.println("현재시간 :" + currentTime);
 				}
+				
+				 DateTime newTime = new DateTime(Integer.parseInt(cmds[1]), Integer.parseInt(cmds[2]),
+				            Integer.parseInt(cmds[3]), Integer.parseInt(cmds[4]), Integer.parseInt(cmds[5]));
+
+				    // 만약 이전에 설정된 시간이 없거나, 새로운 시간이 이전 시간보다 큰 경우에만 현재 시간을 업데이트합니다.
+				    if (previousTime == null || newTime.isAfter(previousTime)) {
+				        currentTime = newTime;
+				        previousTime = newTime; // 이전 시간도 업데이트합니다.
+				    }
+
 				break;
 			// n 1234 서울 대전 100
 			case "n":
@@ -99,15 +110,16 @@ public class Main {
 		            break;
 			    
 				
-//			case "o":
-//				
-//				break;
-//			case "x":
-//
-//				break;
-//			case "c":
-//
-//				break;
+			case "o":
+				vs.printAllVehicles(previousTime);
+				break;
+			case "x":
+
+				break;
+			// c 입력시 현재시간 출
+			case "c":
+				System.out.println("현재시간: "+ previousTime);;	
+				break;
 			}
 
 		}

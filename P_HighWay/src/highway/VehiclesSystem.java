@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import highway.vehicle.Bus;
@@ -65,15 +67,9 @@ public class VehiclesSystem {
 	    }
 	}
 	public void showByEndTime(DateTime et) {
-		for (Vehicle vehicel : vehicleList) {
-			if()
-		}
+		
 	}
 	
-	public List<Vehicle> showByTime()
-	{
-		return null;
-	}
 	
 	
 	public static boolean isVaildEnterHighwayBySpeed(int speed) {
@@ -85,7 +81,37 @@ public class VehiclesSystem {
 		}
 	}
 	
-	
-	
+	public boolean printAllVehicles(DateTime currentTime) {
+	    List<Vehicle> sortedList = new ArrayList<>(vehicleList);
+
+	    // 정렬 순서를 지정하는 맵
+	    Map<String, Integer> carTypeOrder = new HashMap<>();
+	    carTypeOrder.put("c", 1);
+	    carTypeOrder.put("h", 2);
+	    carTypeOrder.put("b", 3);
+	    carTypeOrder.put("t", 4);
+
+	    // 지정한 순서와 시간으로 정렬
+	    sortedList.sort(Comparator.comparing((Vehicle v) -> carTypeOrder.get(v.getCarType()))
+	            .thenComparing(Vehicle::getEnterTime));
+
+	    if (sortedList.isEmpty()) {
+	        System.out.println("통행 차량이 없습니다!");
+	        return false;
+	    }
+
+	    int count = 1;
+	    for (Vehicle vehicle : sortedList) {
+	    	System.out.println(count + ". " + vehicle.getCarType() + " " + vehicle.getcarNumber() + " " + vehicle.carInfo()
+	        + " " + vehicle.getEnterTime() + " " + vehicle.getStartPlace().getName() + "->" + vehicle.getEndPlace().getName()
+	        + " 시속:" + vehicle.getCarSpeed() + "km 위치:"
+	        + Math.abs(vehicle.getDistanceFromTime(currentTime) 
+	        - Place.getByName(vehicle.getStartPlace().getName()).location) + "km");
+
+	        count++;
+	    }
+
+	    return true;
+	}
 	
 }

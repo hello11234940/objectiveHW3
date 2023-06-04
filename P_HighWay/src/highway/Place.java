@@ -18,7 +18,7 @@ public enum Place {
 		this.location = location;
 	}
 	
-	public Place getByName(String name) {
+	public static Place getByName(String name) {
 		for(Place place :Place.values()) {
 			if(place.koreaName.equals(name)) {
 				return place;
@@ -26,7 +26,9 @@ public enum Place {
 		}
 		return null;
 	}
-	
+	public String getName() {
+		return koreaName;
+	}
 	String koreaName;
 	int location;
 }
