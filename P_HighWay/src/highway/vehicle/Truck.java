@@ -13,6 +13,25 @@ public class Truck extends Vehicle {
 		super(carNumber,startPlace,endPlace,speed);
 	}
 	
+	public double getWeightRate(int weight)
+	{	double weightRate = 0;
+		
+		if(this.weight>=4) {
+			 weightRate = 1.2;
+		}
+		
+		else if(this.weight>4 && this.weight<=2) {
+			 weightRate = 1.0;
+		}
+		
+		else if(this.weight<2) {
+			 weightRate = 0.8;
+		}
+		
+		
+		return weightRate;
+	}
+
 
 
 
@@ -22,8 +41,8 @@ public class Truck extends Vehicle {
 
 	@Override
 	public int calcToll() {
-		// TODO Auto-generated method stub
-		return 0;
+		int toll = this.fee + (int)(this.getStartPlace().getDistance(endPlace)*this.rate*this.getWeightRate(weight));
+		return toll;
 	}
 	@Override
 	public String carInfo() {

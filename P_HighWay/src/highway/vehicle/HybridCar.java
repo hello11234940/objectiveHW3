@@ -1,22 +1,23 @@
 package highway.vehicle;
 
-import highway.Account;
+import highway.Place;
 
 public class HybridCar extends Car{
 
-	public HybridCar(Account account, int v) {
-		super(account, v);
-
+	public HybridCar(String carType, int carNumber, int fee, int rate, int volume) {
+		super(carType, carNumber, fee, rate, volume);
+		// TODO Auto-generated constructor stub
+	}
+	public HybridCar(int carNumber, Place startPlace, Place endPlace,int speed) {
+		super(carNumber,startPlace,endPlace,speed);
 	}
 	
-	public HybridCar(String type,int number,int volume)
-	{
-		super(type,number,volume);
+	public String carInfo() {
+		return this.volume + "cc";
 	}
 	
 	public int calcToll() {
-		int toll = super.calcToll() / 2;
-		return toll;
+		return super.calcToll()/2;
 	}
 	
 	

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import exception.InvaildCarNumberException;
+import exception.InvaildLocationException;
+import exception.InvaildPlaceException;
+import exception.InvaildSpeedException;
 import highway.vehicle.Bus;
 import highway.vehicle.Car;
 import highway.vehicle.HybridCar;
@@ -19,10 +23,13 @@ import highway.vehicle.Vehicle;
 public class VehiclesSystem {
 	private List<Vehicle> vehicleList;
 	
+	
 	private DateTime dt;
 	private int carFee;
 	
 	private Scanner sc;
+
+	
 	
 	public VehiclesSystem(Scanner sc,List<Vehicle> vehicleList)
 	{
@@ -53,8 +60,17 @@ public class VehiclesSystem {
 	
 	
 
-	public void enterHighway(DateTime dt, int carNumber, Place startPoint, Place endPoint, int speed) {
-	    for (Vehicle vehicle : vehicleList) {
+	public void enterHighway(DateTime dt, int carNumber, Place startPoint, Place endPoint, int speed) throws InvaildCarNumberException,InvaildLocationException,InvaildSpeedException{
+	    if(!(carNumber >=1000 && carNumber <= 9999)) {
+	    	throw new InvaildCarNumberException("유효하지않은 번호입니다.");
+	    }
+	    if(startPoint.equals(endPoint)) {
+	        throw new InvaildLocationException("시작점과 종점이 같습니다.");
+	    }
+	    if(!(speed >49 && speed <121)) {
+	    	throw new InvaildSpeedException("속도가 올바르지 않습니다.");
+	    }
+		for (Vehicle vehicle : vehicleList) {
 	        if (vehicle.getcarNumber() == carNumber) {
 	        	vehicle.setCurrentTime(dt);
 	            vehicle.setStartPoint(startPoint);
@@ -65,23 +81,40 @@ public class VehiclesSystem {
 	            break;
 	        }
 	    }
+	}            
+	
+	public boolean printExitedVehicles(DateTime currentTime) {
+	    List<Vehicle> exitedVehicles = new ArrayList<>();
+	    for (Vehicle vehicle : vehicleList) {
+	        if (vehicle.hasExited(currentTime)) {
+	            exitedVehicles.add(vehicle);
+	        }
+	    }
+
+	    if (exitedVehicles.isEmpty()) {
+	        System.out.println("진출한 차량이 없습니다!");
+	        return false;
+	    }
+
+	    // Implement the sorting logic here
+
+	    int count = 1;
+	    for (Vehicle vehicle : exitedVehicles) {
+	    	System.out.println(count + ". " + vehicle.getCarType() + " " + vehicle.getcarNumber() + " " + vehicle.carInfo()
+	    	+ " " + vehicle.getEnterTime() + " " + vehicle.getStartPlace().getName() + "->" + vehicle.getEndPlace().getName()
+	    	+ " 시속:" + vehicle.getCarSpeed() + "km 위치:"
+	    	+ vehicle.calculatePosition(currentTime) + "km"
+	    	+ " " + vehicle.getExitTime() + " " + vehicle.calcToll() + "원");
+	    	count++;
+	    }
+
+	    return true;
 	}
-	public void showByEndTime(DateTime et) {
-		
-	}
 	
+
 	
-	
-	public static boolean isVaildEnterHighwayBySpeed(int speed) {
-		if(speed>120 && speed<50) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-	
-	public boolean printAllVehicles(DateTime currentTime) {
+
+	public boolean printAllVehicles(DateTime currentTime) throws InvaildPlaceException {
 	    List<Vehicle> sortedList = new ArrayList<>(vehicleList);
 
 	    // 정렬 순서를 지정하는 맵
@@ -113,5 +146,7 @@ public class VehiclesSystem {
 
 	    return true;
 	}
+	
+	
 	
 }

@@ -18,6 +18,7 @@ public abstract class Vehicle {
 	protected int distance;
 	protected int speed;
 	protected int fee;
+	protected DateTime exitTime;
 
 	ArrayList<Vehicle> vehicleList;
 
@@ -34,34 +35,43 @@ public abstract class Vehicle {
 		this.endPlace = endPlace;
 		this.speed = speed;
 	}
-	
+
 	public int getDistance() {
 		return startPlace.getDistance(endPlace);
 	}
+
 	public void setHighwayInfo(DateTime dt, Place startPlace, Place endPlace, int speed) {
 		this.enterTime = dt;
 		this.startPlace = startPlace;
 		this.endPlace = endPlace;
 		this.speed = speed;
 	}
-	
-	
-	public DateTime getEnterTime()
-	{
+
+	public DateTime getEnterTime() {
 		return enterTime;
 	}
+	
+	
+	
 	public void setCurrentTime(DateTime currentTime) {
 		this.enterTime = currentTime;
 	}
-	
+
 	public void setEndTime(DateTime endTime) {
 		this.endTime = endTime;
 	}
-	
+
 	public String enterHighwayInfo() {
 		return "진입시간: " + enterTime + " 진입장소: " + startPlace.getName() + " 진출장소: " + endPlace.getName() + " 시속: "
 				+ speed + "km";
 	}
+
+	public String exitHighwayInfo() {
+		return carType + " " + carNumber + " " + carInfo() + " " + exitTime + " " + startPlace.getName() + "->"
+				+ endPlace.getName() + " " + fee + "원";
+	}
+	
+	
 
 	public int getcarNumber() {
 		return carNumber;
@@ -87,6 +97,22 @@ public abstract class Vehicle {
 		this.speed = speed;
 	}
 
+	 public void setExitTime(DateTime exitTime) {
+	        this.exitTime = exitTime;
+	}
+	  
+	public DateTime getExitTime() {
+		return this.exitTime;
+	}
+
+	public void setFee(int fee) {
+		this.fee = fee;
+	}
+
+	public int getFee() {
+		return this.fee;
+	}
+
 	public ArrayList<Vehicle> getVehicleList() {
 		return vehicleList;
 	}
@@ -102,34 +128,60 @@ public abstract class Vehicle {
 	public int getCarSpeed() {
 		return this.speed;
 	}
-    public int getDistanceFromTime(DateTime inputTime) {
-        int minutesPassed = getMinutesDifference(this.enterTime, inputTime);
-        int distanceTravelled = this.speed * minutesPassed / 60;
-        return distanceTravelled;
-    }
-    
-    private int getMinutesDifference(DateTime startTime, DateTime endTime) {
-        // Calculate the difference in minutes between two DateTime instances
-        // This assumes that startTime is always before or equal to endTime
-        // You might want to add validation for this
-        int differenceInMinutes = (endTime.year - startTime.year) * 525600 // Minutes in a year
-                + (endTime.month - startTime.month) * 43800 // Minutes in a month
-                + (endTime.day - startTime.day) * 1440 // Minutes in a day
-                + (endTime.hour - startTime.hour) * 60 // Minutes in an hour
-                + (endTime.minute - startTime.minute); // Minutes
 
-        return differenceInMinutes;
-    }
-    
-    public int getDistance(DateTime currentTime) {
-        int minutesPassed = getMinutesDifference(this.enterTime, currentTime);
-        int distanceTravelled = this.speed * minutesPassed / 60;
-        return distanceTravelled;
-    }
+	public int getDistanceFromTime(DateTime inputTime) {
+		int minutesPassed = getMinutesDifference(this.enterTime, inputTime);
+		int distanceTravelled = this.speed * minutesPassed / 60;
+		return distanceTravelled;
+	}
 
+	private int getMinutesDifference(DateTime startTime, DateTime endTime) {
+		
+		int differenceInMinutes = (endTime.year - startTime.year) * 525600 
+				+ (endTime.month - startTime.month) * 43800 
+				+ (endTime.day - startTime.day) * 1440 
+				+ (endTime.hour - startTime.hour) * 60 
+				+ (endTime.minute - startTime.minute); 
+
+		return differenceInMinutes;
+	}
+
+	public int getDistance(DateTime currentTime) {
+		int minutesPassed = getMinutesDifference(this.enterTime, currentTime);
+		int distanceTravelled = this.speed * minutesPassed / 60;
+		return distanceTravelled;
+	}
 	
+	public void calculateExitTime() {
+	    int distance = this.startPlace.getDistance(this.endPlace);
+	    int travelTimeInMinutes = (distance * 60) / this.speed; 
+
+	    
+	    this.exitTime = new DateTime(this.enterTime);
+	    
+	    this.exitTime.addMinutes(travelTimeInMinutes);
+	}
+
+	public boolean hasExited(DateTime currentTime) {
+	    
+	    calculateExitTime();
+	    return currentTime.isAfter(this.exitTime);
+	}
 	
+	public int calculatePosition(DateTime currentTime) {
+	    if (hasExited(currentTime)) {
+	    
+	        return this.startPlace.getDistance(this.endPlace);
+	    } else {
+	       
+	        int minutesPassed = getMinutesDifference(this.enterTime, currentTime);
+	        return (this.speed * minutesPassed) / 60;
+	    }
+	}
+	
+
 	public abstract String carInfo();
+
 	public abstract int calcToll();
 
 }

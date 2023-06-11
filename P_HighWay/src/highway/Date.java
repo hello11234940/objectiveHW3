@@ -2,9 +2,11 @@ package highway;
 
 import java.time.LocalDate;
 
-public class Date implements Comparable<Date> {
-	private int year, month, day;
-	private long epochDay;
+public class Date {
+	public int year;
+	public int month;
+	public int day;
+	protected long epochDay;
 	private static final LocalDate BASE_DATE = LocalDate.of(2023, 5, 12);
 
 	
@@ -21,7 +23,19 @@ public class Date implements Comparable<Date> {
             throw new IllegalArgumentException("유효하지 않은 날짜입니다.");
         }
     }
-
+    public static int daysInMonth(int month, int year) {
+        if (month == 2) {
+            if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+                return 29; // Leap year
+            } else {
+                return 28; // Non-leap year
+            }
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+            return 30; // Months with 30 days
+        } else {
+            return 31; // Months with 31 days
+        }
+    }
 	public Date(Date d) {
 		this(d.getYear(), d.getMonth(), d.getDay());
 	}
@@ -74,8 +88,5 @@ public class Date implements Comparable<Date> {
 		return String.format("%d년  %d월  %d일 ", year, month, day);
 	}
 
-	@Override
-	public int compareTo(Date d) {
-		return (int)(epochDay - d.getEpochDay());
-	}
+
 }

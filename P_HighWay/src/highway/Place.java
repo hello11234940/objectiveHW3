@@ -1,5 +1,7 @@
 package highway;
 
+import exception.InvaildPlaceException;
+
 public enum Place {
 	
 	SEOUL("서울", 0),
@@ -18,13 +20,13 @@ public enum Place {
 		this.location = location;
 	}
 	
-	public static Place getByName(String name) {
+	public static Place getByName(String name) throws InvaildPlaceException{
 		for(Place place :Place.values()) {
 			if(place.koreaName.equals(name)) {
 				return place;
 			}
 		}
-		return null;
+		throw new InvaildPlaceException(name +"은(는) 없는 장소입니다.");
 	}
 	public String getName() {
 		return koreaName;

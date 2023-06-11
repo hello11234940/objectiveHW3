@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import exception.InvaildCarNumberException;
+import exception.InvaildLocationException;
+import exception.InvaildPlaceException;
+import exception.InvaildSpeedException;
+import exception.InvalidTimeException;
 import highway.DateTime;
 import highway.Place;
 import highway.VehiclesSystem;
@@ -18,7 +23,7 @@ import highway.vehicle.Vehicle;
 
 public class Main {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws FileNotFoundException,InvaildCarNumberException,InvaildLocationException,InvaildSpeedException,InvalidTimeException,InvaildPlaceException {
 		DateTime currentTime = null;
 		DateTime previousTime = null;
 		Scanner sc = new Scanner(new InputStreamReader(new FileInputStream("vehicles.txt")));
@@ -69,7 +74,7 @@ public class Main {
 		sc = new Scanner(new InputStreamReader(new FileInputStream("test.txt")));
 		VehiclesSystem vs = new VehiclesSystem(sc, vehiclesList);
 
-		while (true) {
+	end:	while (true) {
  			String[] cmds = sc.nextLine().split(" ");
 
 			switch (cmds[0]) {
@@ -97,8 +102,10 @@ public class Main {
 				break;
 			// n 1234 서울 대전 100
 			case "n":
+				{
 				   if (currentTime != null) {
 		                int carNumber = Integer.parseInt(cmds[1]);
+		   
 		                Place startPoint = Place.getByName(cmds[2]);
 		                Place endPoint = Place.getByName(cmds[3]);
 		                int speed = Integer.parseInt(cmds[4]);
@@ -106,7 +113,10 @@ public class Main {
 		                
 		            } else {
 		                System.out.println("현재시간이 설정되지 않았습니다.");
-		            }
+		            } 
+				} 
+			    
+				  
 		            break;
 			    
 				
@@ -114,16 +124,24 @@ public class Main {
 				vs.printAllVehicles(previousTime);
 				break;
 			case "x":
-
-				break;
+			    if (currentTime != null) {
+			        vs.printExitedVehicles(currentTime);
+			    } else {
+			        System.out.println("현재시간이 설정되지 않았습니다.");
+			    }
+			    break;
 			// c 입력시 현재시간 출
 			case "c":
 				System.out.println("현재시간: "+ previousTime);;	
 				break;
+			case "q":
+				System.out.println("종료합니다. ");
+				break end;
+			
 			}
-
+			
 		}
-
+	sc.close();
 	}
-
+	
 }
